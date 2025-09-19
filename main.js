@@ -3,7 +3,7 @@ const path = require("path");
 const fs = require("fs");
 
 const dataFile = path.join(__dirname, "data", "babies.json");
-app.disableHardwareAcceleration();
+console.log("Main process started");
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -16,6 +16,23 @@ function createWindow() {
 
   win.loadFile("index.html");
 }
+// Event: ready
+app.whenReady().then(() => {
+  createWindow();
+
+  app.on("activate", () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+  });
+});
+
+// Event: close semua window
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
+    app.quit();
+  }
+});
 
 // Helper: baca file JSON
 function readData() {
