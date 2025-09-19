@@ -1,37 +1,34 @@
 [
   {
-    "id": 1,
-    "nama": "Rayya",
-    "tanggal_lahir": "2024-05-10",
-    "berat_badan": [
-      3.2,
-      5,
-      6.5
-    ],
-    "tinggi_badan": [
-      50,
-      60,
-      68
-    ]
+    "id": 1758270375431.9175,
+    "name": "Ahmad Zaki",
+    "birthDate": "2024-01-15",
+    "gender": "L",
+    "motherName": "Siti Aminah",
+    "fatherName": "Budi Santoso",
+    "address": "Jl. Merdeka No. 123",
+    "phone": "081234567890",
+    "weight": 3.2,
+    "height": 50,
+    "headCircumference": 35,
+    "notes": "Bayi sehat",
+    "createdAt": "2025-09-19T08:26:15.431Z",
+    "updatedAt": "2025-09-19T08:26:15.431Z"
   },
   {
-    "id": 2,
-    "nama": "Siti",
-    "tanggal_lahir": "2024-06-01",
-    "berat_badan": [
-      3,
-      4.8
-    ],
-    "tinggi_badan": [
-      49,
-      59
-    ]
-  },
-  {
-    "nama": "drake",
-    "tanggal_lahir": "2025-06-03",
-    "berat_badan": [],
-    "tinggi_badan": [],
-    "id": 1758269597441
+    "id": 1758270375431.1062,
+    "name": "Fatimah Zahra",
+    "birthDate": "2024-02-20",
+    "gender": "P",
+    "motherName": "Dewi Sartika",
+    "fatherName": "Ahmad Yani",
+    "address": "Jl. Pahlawan No. 456",
+    "phone": "081234567891",
+    "weight": 3,
+    "height": 48,
+    "headCircumference": 34,
+    "notes": "Bayi prematur",
+    "createdAt": "2025-09-19T08:26:15.431Z",
+    "updatedAt": "2025-09-19T08:26:15.431Z"
   }
 ]

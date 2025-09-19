@@ -1,20 +1,1226 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Baby Health Tracker</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posyandu Baby Tracker</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #4a5568;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(45deg, #48bb78, #38a169);
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #48bb78, #38a169);
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, #f56565, #e53e3e);
+        }
+
+        .btn-warning {
+            background: linear-gradient(45deg, #ed8936, #dd6b20);
+        }
+
+        .baby-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .baby-card {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .baby-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .baby-info h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .baby-info p {
+            margin: 8px 0;
+            color: #4a5568;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 20px 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .immunization-schedule {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .vaccine-card {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .vaccine-card.completed {
+            border-left-color: #48bb78;
+            background: #f0fff4;
+        }
+
+        .vaccine-card.overdue {
+            border-left-color: #f56565;
+            background: #fff5f5;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .status-scheduled {
+            background: #bee3f8;
+            color: #2b6cb0;
+        }
+
+        .status-completed {
+            background: #c6f6d5;
+            color: #276749;
+        }
+
+        .status-overdue {
+            background: #fed7d7;
+            color: #c53030;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #667eea;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #48bb78, #38a169);
+            transition: width 0.3s ease;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+
+        .alert-success {
+            background: #c6f6d5;
+            color: #276749;
+            border: 1px solid #9ae6b4;
+        }
+
+        .alert-error {
+            background: #fed7d7;
+            color: #c53030;
+            border: 1px solid #feb2b2;
+        }
+
+        .alert-info {
+            background: #bee3f8;
+            color: #2b6cb0;
+            border: 1px solid #90cdf4;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .baby-list {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>Baby Health Tracker</h1>
+    <div class="container">
+        <div class="header">
+            <h1>🍼 Posyandu Baby Tracker</h1>
+            <p>Sistem Pelacakan Tumbuh Kembang Bayi</p>
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="showSection('dashboard')">Dashboard</button>
+                <button class="nav-btn" onclick="showSection('babies')">Data Bayi</button>
+                <button class="nav-btn" onclick="showSection('measurements')">Pengukuran</button>
+                <button class="nav-btn" onclick="showSection('immunizations')">Imunisasi</button>
+                <button class="nav-btn" onclick="showSection('excel')">Excel Import/Export</button>
+            </div>
+        </div>
 
-  <form id="baby-form">
-    <input id="nama" placeholder="Nama Bayi" required />
-    <input id="tgl" type="date" required />
-    <button type="submit">Tambah</button>
-  </form>
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="section active">
+            <h2>Dashboard Posyandu</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalBabies">0</div>
+                    <div>Total Bayi</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="completedImmunizations">0</div>
+                    <div>Imunisasi Selesai</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="overdueImmunizations">0</div>
+                    <div>Imunisasi Terlambat</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalMeasurements">0</div>
+                    <div>Total Pengukuran</div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="ageDistributionChart"></canvas>
+            </div>
+        </div>
 
-  <ul id="baby-list"></ul>
+        <!-- Babies Section -->
+        <div id="babies" class="section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2>Data Bayi</h2>
+                <button class="btn btn-success" onclick="showAddBabyModal()">+ Tambah Bayi</button>
+            </div>
+            
+            <div id="babyList" class="baby-list">
+                <!-- Baby cards will be populated here -->
+            </div>
+        </div>
 
-  <script src="renderer.js"></script>
+        <!-- Measurements Section -->
+        <div id="measurements" class="section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2>Pengukuran Tumbuh Kembang</h2>
+                <select id="measurementBabySelect" onchange="loadMeasurements()">
+                    <option value="">Pilih Bayi</option>
+                </select>
+            </div>
+            
+            <div id="measurementContent">
+                <button class="btn btn-success" onclick="showAddMeasurementModal()">+ Tambah Pengukuran</button>
+                <div class="chart-container">
+                    <canvas id="growthChart"></canvas>
+                </div>
+                <div id="measurementList"></div>
+            </div>
+        </div>
+
+        <!-- Immunizations Section -->
+        <div id="immunizations" class="section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2>Jadwal Imunisasi</h2>
+                <select id="immunizationBabySelect" onchange="loadImmunizations()">
+                    <option value="">Pilih Bayi</option>
+                </select>
+            </div>
+            
+            <div id="immunizationContent">
+                <div id="immunizationList" class="immunization-schedule"></div>
+            </div>
+        </div>
+
+        <!-- Excel Section -->
+        <div id="excel" class="section">
+            <h2>Import/Export Excel</h2>
+            <div class="form-row">
+                <div>
+                    <h3>Download Template Excel</h3>
+                    <p>Download template Excel untuk memudahkan input data bayi secara bulk.</p>
+                    <button class="btn btn-success" onclick="downloadTemplate()">📄 Download Template</button>
+                </div>
+                <div>
+                    <h3>Upload Data Bayi</h3>
+                    <p>Upload file Excel berisi data bayi sesuai dengan template yang tersedia.</p>
+                    <button class="btn btn-warning" onclick="uploadExcel()">📤 Upload Excel</button>
+                </div>
+            </div>
+            <div id="uploadResult"></div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="addBabyModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addBabyModal')">&times;</span>
+            <h2>Tambah Data Bayi</h2>
+            <form id="babyForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="babyName">Nama Bayi *</label>
+                        <input type="text" id="babyName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="birthDate">Tanggal Lahir *</label>
+                        <input type="date" id="birthDate" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="gender">Jenis Kelamin *</label>
+                        <select id="gender" required>
+                            <option value="">Pilih</option>
+                            <option value="L">Laki-laki</option>
+                            <option value="P">Perempuan</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="motherName">Nama Ibu</label>
+                        <input type="text" id="motherName">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fatherName">Nama Ayah</label>
+                        <input type="text" id="fatherName">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">No. Telepon</label>
+                        <input type="tel" id="phone">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="address">Alamat</label>
+                    <textarea id="address" rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="weight">Berat Badan (kg)</label>
+                        <input type="number" id="weight" step="0.1" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="height">Tinggi Badan (cm)</label>
+                        <input type="number" id="height" step="0.1" min="0">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="headCircumference">Lingkar Kepala (cm)</label>
+                        <input type="number" id="headCircumference" step="0.1" min="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Catatan</label>
+                    <textarea id="notes" rows="2"></textarea>
+                </div>
+                <button type="submit" class="btn btn-success">Simpan</button>
+                <button type="button" class="btn" onclick="closeModal('addBabyModal')">Batal</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="addMeasurementModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addMeasurementModal')">&times;</span>
+            <h2>Tambah Pengukuran</h2>
+            <form id="measurementForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="measurementDate">Tanggal Pengukuran *</label>
+                        <input type="date" id="measurementDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="measurementWeight">Berat Badan (kg) *</label>
+                        <input type="number" id="measurementWeight" step="0.1" min="0" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="measurementHeight">Tinggi Badan (cm) *</label>
+                        <input type="number" id="measurementHeight" step="0.1" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="measurementHeadCirc">Lingkar Kepala (cm)</label>
+                        <input type="number" id="measurementHeadCirc" step="0.1" min="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="measurementNotes">Catatan</label>
+                    <textarea id="measurementNotes" rows="2"></textarea>
+                </div>
+                <button type="submit" class="btn btn-success">Simpan</button>
+                <button type="button" class="btn" onclick="closeModal('addMeasurementModal')">Batal</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentBabies = [];
+        let currentMeasurements = [];
+        let currentImmunizations = [];
+        let selectedBabyId = null;
+        let growthChart = null;
+        let ageChart = null;
+
+        // Initialize app
+        window.addEventListener('DOMContentLoaded', async () => {
+            await loadDashboard();
+            await loadBabies();
+            await populateBabySelects();
+        });
+
+        // Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+
+            // Load section-specific data
+            if (sectionId === 'dashboard') {
+                loadDashboard();
+            }
+        }
+
+        // Dashboard functions
+        async function loadDashboard() {
+            try {
+                const stats = await window.electronAPI.getDashboardStats();
+                
+                document.getElementById('totalBabies').textContent = stats.totalBabies;
+                document.getElementById('completedImmunizations').textContent = stats.completedImmunizations;
+                document.getElementById('overdueImmunizations').textContent = stats.overdueImmunizations;
+                document.getElementById('totalMeasurements').textContent = stats.totalMeasurements;
+
+                // Create age distribution chart
+                createAgeDistributionChart(stats.ageGroups);
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                showAlert('Gagal memuat dashboard', 'error');
+            }
+        }
+
+        function createAgeDistributionChart(ageGroups) {
+            const ctx = document.getElementById('ageDistributionChart').getContext('2d');
+            
+            if (ageChart) {
+                ageChart.destroy();
+            }
+
+            ageChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(ageGroups),
+                    datasets: [{
+                        data: Object.values(ageGroups),
+                        backgroundColor: [
+                            '#667eea',
+                            '#764ba2',
+                            '#48bb78',
+                            '#ed8936'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Distribusi Usia Bayi',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Baby functions
+        async function loadBabies() {
+            try {
+                currentBabies = await window.electronAPI.getBabies();
+                displayBabies();
+            } catch (error) {
+                console.error('Error loading babies:', error);
+                showAlert('Gagal memuat data bayi', 'error');
+            }
+        }
+
+        function displayBabies() {
+            const babyList = document.getElementById('babyList');
+            
+            if (currentBabies.length === 0) {
+                babyList.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px;">
+                        <h3>Belum ada data bayi</h3>
+                        <p>Klik tombol "Tambah Bayi" untuk menambahkan data bayi pertama.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            babyList.innerHTML = currentBabies.map(baby => {
+                const age = calculateAge(baby.birthDate);
+                return `
+                    <div class="baby-card">
+                        <div class="baby-info">
+                            <h3>${baby.name}</h3>
+                            <p><strong>Usia:</strong> ${age}</p>
+                            <p><strong>Jenis Kelamin:</strong> ${baby.gender === 'L' ? 'Laki-laki' : 'Perempuan'}</p>
+                            <p><strong>Nama Ibu:</strong> ${baby.motherName || '-'}</p>
+                            <p><strong>Berat Lahir:</strong> ${baby.weight || 0} kg</p>
+                            <p><strong>Tinggi Lahir:</strong> ${baby.height || 0} cm</p>
+                            ${baby.notes ? `<p><strong>Catatan:</strong> ${baby.notes}</p>` : ''}
+                            <div style="margin-top: 15px;">
+                                <button class="btn btn-warning" onclick="editBaby(${baby.id})">Edit</button>
+                                <button class="btn btn-danger" onclick="deleteBaby(${baby.id})">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function calculateAge(birthDate) {
+            const birth = new Date(birthDate);
+            const now = new Date();
+            const diffTime = now - birth;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const diffMonths = Math.floor(diffDays / 30.44);
+            
+            if (diffMonths < 1) {
+                return `${diffDays} hari`;
+            } else if (diffMonths < 12) {
+                return `${diffMonths} bulan`;
+            } else {
+                const years = Math.floor(diffMonths / 12);
+                const remainingMonths = diffMonths % 12;
+                return `${years} tahun ${remainingMonths} bulan`;
+            }
+        }
+
+        async function populateBabySelects() {
+            const selects = ['measurementBabySelect', 'immunizationBabySelect'];
+            
+            selects.forEach(selectId => {
+                const select = document.getElementById(selectId);
+                select.innerHTML = '<option value="">Pilih Bayi</option>';
+                
+                currentBabies.forEach(baby => {
+                    const option = document.createElement('option');
+                    option.value = baby.id;
+                    option.textContent = baby.name;
+                    select.appendChild(option);
+                });
+            });
+        }
+
+        // Modal functions
+        function showAddBabyModal() {
+            document.getElementById('babyForm').reset();
+            document.getElementById('addBabyModal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Baby form submission
+        document.getElementById('babyForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const baby = {
+                name: document.getElementById('babyName').value,
+                birthDate: document.getElementById('birthDate').value,
+                gender: document.getElementById('gender').value,
+                motherName: document.getElementById('motherName').value,
+                fatherName: document.getElementById('fatherName').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                weight: parseFloat(document.getElementById('weight').value) || 0,
+                height: parseFloat(document.getElementById('height').value) || 0,
+                headCircumference: parseFloat(document.getElementById('headCircumference').value) || 0,
+                notes: document.getElementById('notes').value
+            };
+
+            try {
+                const result = await window.electronAPI.addBaby(baby);
+                if (result) {
+                    showAlert('Data bayi berhasil ditambahkan', 'success');
+                    closeModal('addBabyModal');
+                    await loadBabies();
+                    await populateBabySelects();
+                    await loadDashboard();
+                } else {
+                    showAlert('Gagal menambahkan data bayi', 'error');
+                }
+            } catch (error) {
+                console.error('Error adding baby:', error);
+                showAlert('Terjadi kesalahan saat menambahkan data bayi', 'error');
+            }
+        });
+
+        async function deleteBaby(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus data bayi ini? Semua data terkait (pengukuran dan imunisasi) akan ikut terhapus.')) {
+                try {
+                    const result = await window.electronAPI.deleteBaby(id);
+                    if (result) {
+                        showAlert('Data bayi berhasil dihapus', 'success');
+                        await loadBabies();
+                        await populateBabySelects();
+                        await loadDashboard();
+                    } else {
+                        showAlert('Gagal menghapus data bayi', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error deleting baby:', error);
+                    showAlert('Terjadi kesalahan saat menghapus data bayi', 'error');
+                }
+            }
+        }
+
+        // Measurements functions
+        async function loadMeasurements() {
+            const babyId = document.getElementById('measurementBabySelect').value;
+            if (!babyId) {
+                document.getElementById('measurementContent').style.display = 'none';
+                return;
+            }
+
+            selectedBabyId = parseInt(babyId);
+            document.getElementById('measurementContent').style.display = 'block';
+
+            try {
+                currentMeasurements = await window.electronAPI.getMeasurements(selectedBabyId);
+                createGrowthChart();
+                displayMeasurements();
+            } catch (error) {
+                console.error('Error loading measurements:', error);
+                showAlert('Gagal memuat data pengukuran', 'error');
+            }
+        }
+
+        function createGrowthChart() {
+            const ctx = document.getElementById('growthChart').getContext('2d');
+            
+            if (growthChart) {
+                growthChart.destroy();
+            }
+
+            const dates = currentMeasurements.map(m => m.date);
+            const weights = currentMeasurements.map(m => m.weight);
+            const heights = currentMeasurements.map(m => m.height);
+
+            growthChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [
+                        {
+                            label: 'Berat Badan (kg)',
+                            data: weights,
+                            borderColor: '#667eea',
+                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                            tension: 0.4,
+                            yAxisID: 'weight'
+                        },
+                        {
+                            label: 'Tinggi Badan (cm)',
+                            data: heights,
+                            borderColor: '#48bb78',
+                            backgroundColor: 'rgba(72, 187, 120, 0.1)',
+                            tension: 0.4,
+                            yAxisID: 'height'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Grafik Pertumbuhan',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    scales: {
+                        weight: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Berat Badan (kg)'
+                            }
+                        },
+                        height: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Tinggi Badan (cm)'
+                            },
+                            grid: {
+                                drawOnChartArea: false,
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function displayMeasurements() {
+            const measurementList = document.getElementById('measurementList');
+            
+            if (currentMeasurements.length === 0) {
+                measurementList.innerHTML = `
+                    <div class="alert alert-info">
+                        Belum ada data pengukuran untuk bayi ini.
+                    </div>
+                `;
+                return;
+            }
+
+            measurementList.innerHTML = `
+                <h3>Riwayat Pengukuran</h3>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                        <thead>
+                            <tr style="background: #f7fafc;">
+                                <th style="padding: 12px; border: 1px solid #e2e8f0;">Tanggal</th>
+                                <th style="padding: 12px; border: 1px solid #e2e8f0;">Berat (kg)</th>
+                                <th style="padding: 12px; border: 1px solid #e2e8f0;">Tinggi (cm)</th>
+                                <th style="padding: 12px; border: 1px solid #e2e8f0;">Lingkar Kepala (cm)</th>
+                                <th style="padding: 12px; border: 1px solid #e2e8f0;">Catatan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${currentMeasurements.map(measurement => `
+                                <tr>
+                                    <td style="padding: 12px; border: 1px solid #e2e8f0;">${formatDate(measurement.date)}</td>
+                                    <td style="padding: 12px; border: 1px solid #e2e8f0;">${measurement.weight}</td>
+                                    <td style="padding: 12px; border: 1px solid #e2e8f0;">${measurement.height}</td>
+                                    <td style="padding: 12px; border: 1px solid #e2e8f0;">${measurement.headCircumference || '-'}</td>
+                                    <td style="padding: 12px; border: 1px solid #e2e8f0;">${measurement.notes || '-'}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function showAddMeasurementModal() {
+            if (!selectedBabyId) {
+                showAlert('Pilih bayi terlebih dahulu', 'error');
+                return;
+            }
+            
+            document.getElementById('measurementForm').reset();
+            document.getElementById('measurementDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('addMeasurementModal').style.display = 'block';
+        }
+
+        // Measurement form submission
+        document.getElementById('measurementForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const measurement = {
+                babyId: selectedBabyId,
+                date: document.getElementById('measurementDate').value,
+                weight: parseFloat(document.getElementById('measurementWeight').value),
+                height: parseFloat(document.getElementById('measurementHeight').value),
+                headCircumference: parseFloat(document.getElementById('measurementHeadCirc').value) || null,
+                notes: document.getElementById('measurementNotes').value
+            };
+
+            try {
+                const result = await window.electronAPI.addMeasurement(measurement);
+                if (result) {
+                    showAlert('Data pengukuran berhasil ditambahkan', 'success');
+                    closeModal('addMeasurementModal');
+                    await loadMeasurements();
+                    await loadDashboard();
+                } else {
+                    showAlert('Gagal menambahkan data pengukuran', 'error');
+                }
+            } catch (error) {
+                console.error('Error adding measurement:', error);
+                showAlert('Terjadi kesalahan saat menambahkan data pengukuran', 'error');
+            }
+        });
+
+        // Immunization functions
+        async function loadImmunizations() {
+            const babyId = document.getElementById('immunizationBabySelect').value;
+            if (!babyId) {
+                document.getElementById('immunizationContent').style.display = 'none';
+                return;
+            }
+
+            selectedBabyId = parseInt(babyId);
+            document.getElementById('immunizationContent').style.display = 'block';
+
+            try {
+                currentImmunizations = await window.electronAPI.getImmunizations(selectedBabyId);
+                displayImmunizations();
+            } catch (error) {
+                console.error('Error loading immunizations:', error);
+                showAlert('Gagal memuat data imunisasi', 'error');
+            }
+        }
+
+        function displayImmunizations() {
+            const immunizationList = document.getElementById('immunizationList');
+            
+            if (currentImmunizations.length === 0) {
+                immunizationList.innerHTML = `
+                    <div class="alert alert-info">
+                        Belum ada jadwal imunisasi untuk bayi ini.
+                    </div>
+                `;
+                return;
+            }
+
+            // Calculate completion percentage
+            const completedCount = currentImmunizations.filter(i => i.status === 'completed').length;
+            const completionPercentage = (completedCount / currentImmunizations.length) * 100;
+
+            immunizationList.innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <h3>Progress Imunisasi</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${completionPercentage}%"></div>
+                    </div>
+                    <p>${completedCount} dari ${currentImmunizations.length} imunisasi selesai (${Math.round(completionPercentage)}%)</p>
+                </div>
+                
+                <div class="immunization-schedule">
+                    ${currentImmunizations.map(immunization => {
+                        const isOverdue = immunization.status === 'scheduled' && new Date(immunization.scheduledDate) < new Date();
+                        const statusClass = immunization.status === 'completed' ? 'completed' : (isOverdue ? 'overdue' : '');
+                        
+                        return `
+                            <div class="vaccine-card ${statusClass}">
+                                <h4>${immunization.vaccineName}</h4>
+                                <p>${immunization.description}</p>
+                                <p><strong>Jadwal:</strong> ${formatDate(immunization.scheduledDate)}</p>
+                                ${immunization.actualDate ? `<p><strong>Tanggal Vaksin:</strong> ${formatDate(immunization.actualDate)}</p>` : ''}
+                                <p><strong>Status:</strong> 
+                                    <span class="status-badge status-${immunization.status}">
+                                        ${immunization.status === 'completed' ? 'Selesai' : (isOverdue ? 'Terlambat' : 'Terjadwal')}
+                                    </span>
+                                </p>
+                                ${immunization.notes ? `<p><strong>Catatan:</strong> ${immunization.notes}</p>` : ''}
+                                ${immunization.status === 'scheduled' ? `
+                                    <button class="btn btn-success" onclick="markImmunizationCompleted(${immunization.id})">
+                                        ✓ Tandai Selesai
+                                    </button>
+                                ` : ''}
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        async function markImmunizationCompleted(immunizationId) {
+            const actualDate = prompt('Masukkan tanggal vaksinasi (YYYY-MM-DD):', new Date().toISOString().split('T')[0]);
+            
+            if (!actualDate) return;
+
+            const notes = prompt('Catatan (opsional):') || '';
+
+            try {
+                const immunization = currentImmunizations.find(i => i.id === immunizationId);
+                if (immunization) {
+                    immunization.status = 'completed';
+                    immunization.actualDate = actualDate;
+                    immunization.notes = notes;
+                    
+                    const result = await window.electronAPI.updateImmunization(immunization);
+                    if (result) {
+                        showAlert('Status imunisasi berhasil diperbarui', 'success');
+                        await loadImmunizations();
+                        await loadDashboard();
+                    } else {
+                        showAlert('Gagal memperbarui status imunisasi', 'error');
+                    }
+                }
+            } catch (error) {
+                console.error('Error updating immunization:', error);
+                showAlert('Terjadi kesalahan saat memperbarui status imunisasi', 'error');
+            }
+        }
+
+        // Excel functions
+        async function downloadTemplate() {
+            try {
+                const result = await window.electronAPI.downloadTemplate();
+                if (result.success) {
+                    showAlert(`Template berhasil disimpan di: ${result.path}`, 'success');
+                } else {
+                    showAlert(result.message || 'Gagal menyimpan template', 'error');
+                }
+            } catch (error) {
+                console.error('Error downloading template:', error);
+                showAlert('Terjadi kesalahan saat menyimpan template', 'error');
+            }
+        }
+
+        async function uploadExcel() {
+            try {
+                const result = await window.electronAPI.uploadExcel();
+                const uploadResult = document.getElementById('uploadResult');
+                
+                if (result.success) {
+                    let html = `
+                        <div class="alert alert-success">
+                            <h4>Upload berhasil!</h4>
+                            <p>Berhasil mengimport ${result.imported} dari ${result.total} data bayi.</p>
+                        </div>
+                    `;
+                    
+                    if (result.errors && result.errors.length > 0) {
+                        html += `
+                            <div class="alert alert-error">
+                                <h4>Terdapat ${result.errors.length} error:</h4>
+                                <ul>
+                                    ${result.errors.map(error => `<li>${error}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `;
+                    }
+                    
+                    uploadResult.innerHTML = html;
+                    
+                    if (result.imported > 0) {
+                        await loadBabies();
+                        await populateBabySelects();
+                        await loadDashboard();
+                    }
+                } else {
+                    uploadResult.innerHTML = `
+                        <div class="alert alert-error">
+                            <h4>Upload gagal!</h4>
+                            <p>${result.message}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error uploading Excel:', error);
+                document.getElementById('uploadResult').innerHTML = `
+                    <div class="alert alert-error">
+                        <h4>Terjadi kesalahan!</h4>
+                        <p>Terjadi kesalahan saat mengupload file Excel.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Utility functions
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('id-ID', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        function showAlert(message, type = 'info') {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            alert.style.position = 'fixed';
+            alert.style.top = '20px';
+            alert.style.right = '20px';
+            alert.style.zIndex = '9999';
+            alert.style.minWidth = '300px';
+            alert.style.maxWidth = '500px';
+            
+            document.body.appendChild(alert);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.parentNode.removeChild(alert);
+                }
+            }, 5000);
+            
+            // Click to close
+            alert.addEventListener('click', () => {
+                if (alert.parentNode) {
+                    alert.parentNode.removeChild(alert);
+                }
+            });
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (event) => {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+
+        // Handle ESC key to close modals
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                const modals = document.querySelectorAll('.modal');
+                modals.forEach(modal => {
+                    modal.style.display = 'none';
+                });
+            }
+        });
+
+        console.log('Posyandu Baby Tracker initialized successfully');
+    </script>
 </body>
 </html>
