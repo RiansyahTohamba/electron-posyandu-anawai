@@ -1,8 +1,29 @@
-// renderer.js
-const btn = document.getElementById('btn');
-const out = document.getElementById('out');
+const form = document.getElementById("baby-form");
+const namaInput = document.getElementById("nama");
+const tglInput = document.getElementById("tgl");
+const list = document.getElementById("baby-list");
 
-btn.addEventListener('click', async () => {
-  const res = await window.electronAPI.ping();
-  out.textContent = res;
+async function loadBabies() {
+  const babies = await window.api.getBabies();
+  list.innerHTML = "";
+  babies.forEach(baby => {
+    const li = document.createElement("li");
+    li.textContent = `${baby.nama} (lahir: ${baby.tanggal_lahir})`;
+    list.appendChild(li);
+  });
+}
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  await window.api.addBaby({
+    nama: namaInput.value,
+    tanggal_lahir: tglInput.value,
+    berat_badan: [],
+    tinggi_badan: []
+  });
+  namaInput.value = "";
+  tglInput.value = "";
+  loadBabies();
 });
+
+loadBabies();

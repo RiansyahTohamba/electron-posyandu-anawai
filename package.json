@@ -12,11 +12,21 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^38.1.1"
+    "electron": "^38.1.1",
+    "electron-rebuild": "^3.2.9"
   },
   "build": {
     "appId": "com.example.myapp",
     "productName": "MyElectronApp",
-    "files": ["**/*"]
+    "files": [
+      "**/*"
+    ],
+    "win": {
+      "target": "nsis"
+    }
+  },
+  "dependencies": {
+    "chart.js": "^4.5.0",
+    "xlsx": "^0.18.5"
   }
 }
