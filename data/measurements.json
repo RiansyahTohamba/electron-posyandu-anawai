@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1640995200000,
+    "babyId": 1640995200000,
+    "date": "2024-01-20",
+    "weight": 3.2,
+    "height": 50,
+    "headCircumference": 35,
+    "notes": "Pengukuran lahir - kondisi bayi sehat"
+  },
+  {
+    "id": 1643673600000,
+    "babyId": 1640995200000,
+    "date": "2024-02-01",
+    "weight": 3.8,
+    "height": 52,
+    "headCircumference": 36,
+    "notes": "Pertumbuhan normal, ASI eksklusif"
+  },
+  {
+    "id": 1646092800000,
+    "babyId": 1640995200000,
+    "date": "2024-03-01",
+    "weight": 4.5,
+    "height": 55,
+    "headCircumference": 37.5,
+    "notes": "Berat badan naik baik"
+  },
+  {
+    "id": 1648771200000,
+    "babyId": 1640995200000,
+    "date": "2024-04-01",
+    "weight": 5.2,
+    "height": 58,
+    "headCircumference": 38.8,
+    "notes": "Perkembangan sesuai kurva pertumbuhan"
+  },
+  {
+    "id": 1651363200000,
+    "babyId": 1640995200000,
+    "date": "2024-05-01",
+    "weight": 5.8,
+    "height": 60,
+    "headCircumference": 39.5,
+    "notes": "Mulai MPASI, respon baik"
+  },
+  {
+    "id": 1654041600000,
+    "babyId": 1640995200000,
+    "date": "2024-06-01",
+    "weight": 6.4,
+    "height": 62,
+    "headCircumference": 40.2,
+    "notes": "MPASI berjalan lancar, berat naik stabil"
+  },
+  {
+    "id": 1641081600000,
+    "babyId": 1641081600000,
+    "date": "2024-02-25",
+    "weight": 3.0,
+    "height": 48,
+    "headCircumference": 34,
+    "notes": "Bayi prematur - pengukuran lahir"
+  },
+  {
+    "id": 1643760000000,
+    "babyId": 1641081600000,
+    "date": "2024-03-05",
+    "weight": 3.4,
+    "height": 49.5,
+    "headCircumference": 34.8,
+    "notes": "Catch-up growth bayi prematur berjalan baik"
+  },
+  {
+    "id": 1646179200000,
+    "babyId": 1641081600000,
+    "date": "2024-04-02",
+    "weight": 4.1,
+    "height": 52,
+    "headCircumference": 36,
+    "notes": "Pertumbuhan mengejar, ASI + formula"
+  },
+  {
+    "id": 1648857600000,
+    "babyId": 1641081600000,
+    "date": "2024-05-02",
+    "weight": 4.8,
+    "height": 55,
+    "headCircumference": 37.2,
+    "notes": "Berat badan sudah dalam rentang normal"
+  }
+]

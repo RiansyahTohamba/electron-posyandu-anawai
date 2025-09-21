@@ -798,7 +798,74 @@
                 showAlert('Terjadi kesalahan saat menambahkan data bayi', 'error');
             }
         });
+       // ...existing code...
+async function editBaby(id) {
+    const baby = currentBabies.find(b => b.id === id);
+    if (!baby) {
+        showAlert('Data bayi tidak ditemukan', 'error');
+        return;
+    }
 
+    // Populate form with existing data
+    document.getElementById('babyName').value = baby.name;
+    document.getElementById('birthDate').value = baby.birthDate;
+    document.getElementById('gender').value = baby.gender || '';
+    document.getElementById('motherName').value = baby.motherName || '';
+    document.getElementById('fatherName').value = baby.fatherName || '';
+    document.getElementById('phone').value = baby.phone || '';
+    document.getElementById('address').value = baby.address || '';
+    document.getElementById('weight').value = baby.weight || '';
+    document.getElementById('height').value = baby.height || '';
+    document.getElementById('headCircumference').value = baby.headCircumference || '';
+    document.getElementById('notes').value = baby.notes || '';
+
+    // Show modal
+    document.getElementById('addBabyModal').style.display = 'block';
+
+    // Remove previous submit event to avoid duplicate listeners
+    const babyForm = document.getElementById('babyForm');
+    const newHandler = async function(e) {
+        e.preventDefault();
+        const updatedBaby = {
+            id: baby.id,
+            name: document.getElementById('babyName').value,
+            birthDate: document.getElementById('birthDate').value,
+            gender: document.getElementById('gender').value,
+            motherName: document.getElementById('motherName').value,
+            fatherName: document.getElementById('fatherName').value,
+            phone: document.getElementById('phone').value,
+            address: document.getElementById('address').value,
+            weight: parseFloat(document.getElementById('weight').value) || 0,
+            height: parseFloat(document.getElementById('height').value) || 0,
+            headCircumference: parseFloat(document.getElementById('headCircumference').value) || 0,
+            notes: document.getElementById('notes').value
+        };
+        try {
+            const result = await window.electronAPI.updateBaby(updatedBaby);
+            if (result) {
+                showAlert('Data bayi berhasil diperbarui', 'success');
+                closeModal('addBabyModal');
+                await loadBabies();
+                await populateBabySelects();
+                await loadDashboard();
+            } else {
+                showAlert('Gagal memperbarui data bayi', 'error');
+            }
+        } catch (error) {
+            console.error('Error updating baby:', error);
+            showAlert('Terjadi kesalahan saat memperbarui data bayi', 'error');
+        }
+        // Remove this handler after submit
+        babyForm.removeEventListener('submit', newHandler);
+    };
+
+    // Remove any previous edit handler
+    babyForm.onsubmit = null;
+    babyForm.removeEventListener('submit', babyForm._editHandler || (() => {}));
+    babyForm._editHandler = newHandler;
+    babyForm.addEventListener('submit', newHandler);
+}
+// ...existing code...
         async function deleteBaby(id) {
             if (confirm('Apakah Anda yakin ingin menghapus data bayi ini? Semua data terkait (pengukuran dan imunisasi) akan ikut terhapus.')) {
                 try {
