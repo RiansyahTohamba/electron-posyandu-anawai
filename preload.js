@@ -3,6 +3,7 @@ const { contextBridge, ipcRenderer } = require("electron");
 // Expose protected methods that allow the renderer process to use
 // the ipcRenderer without exposing the entire object
 contextBridge.exposeInMainWorld("electronAPI", {
+  askDateAndNotes: () => ipcRenderer.invoke('ask-date-and-notes'),
   // Basic baby operations
   getBabies: () => ipcRenderer.invoke("get-babies"),
   addBaby: (baby) => ipcRenderer.invoke("add-baby", baby),

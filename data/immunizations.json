@@ -317,10 +317,11 @@
     "vaccineName": "BCG",
     "description": "Vaksin Tuberkulosis",
     "scheduledDate": "2023-12-20",
-    "status": "scheduled",
-    "actualDate": null,
-    "notes": "",
-    "createdAt": "2025-09-21T23:34:08.329Z"
+    "status": "completed",
+    "actualDate": "2023-12-20",
+    "notes": "hasil baik",
+    "createdAt": "2025-09-21T23:34:08.329Z",
+    "updatedAt": "2025-10-03T22:27:27.627Z"
   },
   {
     "id": 1758497648329.5479,

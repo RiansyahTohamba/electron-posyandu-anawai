@@ -57,7 +57,7 @@
     "id": 1641081600000,
     "babyId": 1641081600000,
     "date": "2024-02-25",
-    "weight": 3.0,
+    "weight": 3,
     "height": 48,
     "headCircumference": 34,
     "notes": "Bayi prematur - pengukuran lahir"
@@ -88,5 +88,23 @@
     "height": 55,
     "headCircumference": 37.2,
     "notes": "Berat badan sudah dalam rentang normal"
+  },
+  {
+    "babyId": 1758497648313,
+    "date": "2025-08-14",
+    "weight": 12,
+    "height": 60,
+    "headCircumference": 30,
+    "notes": "sudah bagus",
+    "id": 1759529567325
+  },
+  {
+    "babyId": 1758497648313,
+    "date": "2025-07-14",
+    "weight": 11,
+    "height": 55,
+    "headCircumference": 30,
+    "notes": "naik",
+    "id": 1759529591481
   }
 ]

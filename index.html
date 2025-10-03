@@ -1127,7 +1127,7 @@ async function editBaby(id) {
                                 </p>
                                 ${immunization.notes ? `<p><strong>Catatan:</strong> ${immunization.notes}</p>` : ''}
                                 ${immunization.status === 'scheduled' ? `
-                                    <button class="btn btn-success" onclick="markImmunizationCompleted(${immunization.id})">
+                                    <button class="btn btn-success" onclick="markImmunizationCompleted(${immunization.id})" >
                                         ✓ Tandai Selesai
                                     </button>
                                 ` : ''}
@@ -1139,21 +1139,20 @@ async function editBaby(id) {
         }
 
         async function markImmunizationCompleted(immunizationId) {
-            const actualDate = prompt('Masukkan tanggal vaksinasi (YYYY-MM-DD):', new Date().toISOString().split('T')[0]);
-            
-            if (!actualDate) return;
-
-            const notes = prompt('Catatan (opsional):') || '';
-
             try {
+                // minta input ke main process (electron-prompt)
+                const result = await window.electronAPI.askDateAndNotes();
+
+                if (!result) return; // kalau user cancel
+
                 const immunization = currentImmunizations.find(i => i.id === immunizationId);
                 if (immunization) {
                     immunization.status = 'completed';
-                    immunization.actualDate = actualDate;
-                    immunization.notes = notes;
-                    
-                    const result = await window.electronAPI.updateImmunization(immunization);
-                    if (result) {
+                    immunization.actualDate = result.actualDate;
+                    immunization.notes = result.notes;
+
+                    const updateResult = await window.electronAPI.updateImmunization(immunization);
+                    if (updateResult) {
                         showAlert('Status imunisasi berhasil diperbarui', 'success');
                         await loadImmunizations();
                         await loadDashboard();
@@ -1166,7 +1165,6 @@ async function editBaby(id) {
                 showAlert('Terjadi kesalahan saat memperbarui status imunisasi', 'error');
             }
         }
-
         // Excel functions
         async function downloadTemplate() {
             try {

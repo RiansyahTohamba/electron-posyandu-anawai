@@ -182,7 +182,7 @@
     "fatherName": "Taufik Rahman",
     "phone": "081234567896",
     "address": "Jl. Diponegoro No. 19, Kendari",
-    "weight": 9.0,
+    "weight": 9,
     "height": 74,
     "headCircumference": 47,
     "notes": "Mulai belajar berdiri",
@@ -214,7 +214,7 @@
     "fatherName": "Sudirman",
     "phone": "081234567898",
     "address": "Jl. Kenanga No. 10, Kendari",
-    "weight": 13.0,
+    "weight": 13,
     "height": 92,
     "headCircumference": 50,
     "notes": "Aktif berlari dan memanjat",
@@ -269,5 +269,21 @@
     "id": 1758497847561,
     "createdAt": "2025-10-02T13:47:27.561Z",
     "updatedAt": "2025-10-02T13:47:27.561Z"
+  },
+  {
+    "id": 1759386333499.1987,
+    "name": "David nurbianto",
+    "birthDate": "2024-01-15",
+    "gender": "L",
+    "motherName": "Siti Aminah",
+    "fatherName": "Budi Santoso",
+    "address": "Jl. Merdeka No. 123",
+    "phone": "081234567890",
+    "weight": 3.2,
+    "height": 50,
+    "headCircumference": 35,
+    "notes": "Bayi sehat",
+    "createdAt": "2025-10-02T06:25:33.501Z",
+    "updatedAt": "2025-10-02T06:25:33.501Z"
   }
 ]

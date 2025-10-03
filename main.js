@@ -6,6 +6,7 @@ const XLSX = require("xlsx");
 const dataFile = path.join(__dirname, "data", "babies.json");
 const immunizationFile = path.join(__dirname, "data", "immunizations.json");
 const measurementsFile = path.join(__dirname, "data", "measurements.json");
+const prompt = require('electron-prompt');
 
 console.log("Main process started");
 
@@ -19,6 +20,7 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 1200,
     height: 800,
+    icon: path.join(__dirname, 'assets/sipandu.ico'),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
@@ -149,6 +151,25 @@ const immunizationSchedule = [
 // IPC listeners - Basic baby operations
 ipcMain.handle("get-babies", (event) => {
   return readData();
+});
+
+ipcMain.handle('ask-date-and-notes', async (event) => {
+  const actualDate = await prompt({
+    title: 'Tanggal Vaksinasi',
+    label: 'Masukkan tanggal vaksinasi (YYYY-MM-DD):',
+    value: new Date().toISOString().split('T')[0],
+    type: 'input'
+  });
+
+  if (!actualDate) return null;
+
+  const notes = await prompt({
+    title: 'Catatan',
+    label: 'Masukkan catatan (opsional):',
+    type: 'input'
+  }) || '';
+
+  return { actualDate, notes };
 });
 
 ipcMain.handle("add-baby", (event, baby) => {
