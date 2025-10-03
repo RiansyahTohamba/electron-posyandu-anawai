@@ -192,27 +192,44 @@
             height: 400px;
             margin: 20px 0;
         }
+        .section {
+            padding: 20px;
+        }
 
         .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
         }
 
         .stat-card {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 25px;
-            border-radius: 20px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        background: #fff;
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        text-align: center;
         }
 
         .stat-number {
-            font-size: 2.5em;
-            font-weight: bold;
-            margin-bottom: 10px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        }
+
+        .chart-container {
+        background: #fff;
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 24px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Tambahan kalau mau grid untuk charts */
+        .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 20px;
         }
 
         .immunization-schedule {
@@ -386,29 +403,44 @@
         <!-- Dashboard Section -->
         <div id="dashboard" class="section active">
             <h2>Dashboard Posyandu</h2>
+
+            <!-- Statistik -->
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-number" id="totalBabies">0</div>
-                    <div>Total Bayi</div>
+                <div class="stat-number" id="totalBabies">0</div>
+                <div>Total Bayi</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" id="completedImmunizations">0</div>
-                    <div>Imunisasi Selesai</div>
+                <div class="stat-number" id="completedImmunizations">0</div>
+                <div>Imunisasi Selesai</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" id="overdueImmunizations">0</div>
-                    <div>Imunisasi Terlambat</div>
+                <div class="stat-number" id="overdueImmunizations">0</div>
+                <div>Imunisasi Terlambat</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" id="totalMeasurements">0</div>
-                    <div>Total Pengukuran</div>
+                <div class="stat-number" id="totalMeasurements">0</div>
+                <div>Total Pengukuran</div>
                 </div>
             </div>
-            
-            <div class="chart-container">
+
+            <!-- Charts -->
+            <div class="charts-grid">
+                <div class="chart-container">
+                <h3>Distribusi Usia</h3>
                 <canvas id="ageDistributionChart"></canvas>
+                </div>
+                <div class="chart-container">
+                <h3>Distribusi Gender</h3>
+                <canvas id="genderChart"></canvas>
+                </div>
+                <div class="chart-container">
+                <h3>Status Imunisasi</h3>
+                <canvas id="immunizationStatusChart"></canvas>
+                </div>
             </div>
-        </div>
+            </div>
+
 
         <!-- Babies Section -->
         <div id="babies" class="section">
@@ -629,9 +661,76 @@
 
                 // Create age distribution chart
                 createAgeDistributionChart(stats.ageGroups);
+                // =================
+                // babies & measurement
+                const babies = await fetch('./data/babies.json').then(res => res.json());
+                const immunizations = await fetch('./data/immunizations.json').then(res => res.json());
+
+                // --- 1. Gender Distribution ---
+                const genderCounts = { L: 0, P: 0 };
+                babies.forEach(baby => {
+                    if (baby.gender === "L") genderCounts.L++;
+                    if (baby.gender === "P") genderCounts.P++;
+                });
+
+                new Chart(document.getElementById("genderChart"), {
+                    type: 'pie',
+                    data: {
+                        labels: ["Laki-laki", "Perempuan"],
+                        datasets: [{
+                            data: [genderCounts.L, genderCounts.P],
+                            backgroundColor: ["#36A2EB", "#FF6384"]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Distribusi Usia Bayi',
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                }
+                            },
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+
+                // --- 2. Immunization Status ---
+                const statusCounts = { scheduled: 0, completed: 0, overdue: 0 };
+                immunizations.forEach(imm => {
+                    if (imm.status === "scheduled") statusCounts.scheduled++;
+                    if (imm.status === "completed") statusCounts.completed++;
+                    if (imm.status === "overdue") statusCounts.overdue++;
+                });
+
+                new Chart(document.getElementById("immunizationStatusChart"), {
+                    type: 'bar',
+                    data: {
+                        labels: ["Scheduled", "Completed", "Overdue"],
+                        datasets: [{
+                            label: "Jumlah Imunisasi",
+                            data: [statusCounts.scheduled, statusCounts.completed, statusCounts.overdue],
+                            backgroundColor: ["#FFCE56", "#4BC0C0", "#FF6384"]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
             } catch (error) {
                 console.error('Error loading dashboard:', error);
-                showAlert('Gagal memuat dashboard', 'error');
             }
         }
 
