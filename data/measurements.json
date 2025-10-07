@@ -106,5 +106,14 @@
     "headCircumference": 30,
     "notes": "naik",
     "id": 1759529591481
+  },
+  {
+    "babyId": 1640995200000,
+    "date": "2025-10-04",
+    "weight": 70,
+    "height": 90,
+    "headCircumference": 35,
+    "notes": "pertumbuhan sudah baik",
+    "id": 1759550579578
   }
 ]

@@ -89,11 +89,11 @@
     "vaccineName": "DPT-HB-Hib (3)",
     "description": "Vaksin DPT, Hepatitis B, Haemophilus influenzae type b dosis 3",
     "scheduledDate": "2024-05-15",
-    "status": "scheduled",
-    "actualDate": null,
-    "notes": "",
+    "status": "completed",
+    "actualDate": "2025-10-04",
+    "notes": "vaksin tepat waktu",
     "createdAt": "2024-01-15T10:00:00.000Z",
-    "updatedAt": "2024-01-15T10:00:00.000Z"
+    "updatedAt": "2025-10-04T04:03:51.444Z"
   },
   {
     "id": 1640995200009,

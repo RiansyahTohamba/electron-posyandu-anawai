@@ -285,5 +285,37 @@
     "notes": "Bayi sehat",
     "createdAt": "2025-10-02T06:25:33.501Z",
     "updatedAt": "2025-10-02T06:25:33.501Z"
+  },
+  {
+    "id": 1759550493343.393,
+    "name": "Ilham",
+    "birthDate": "2024-01-15",
+    "gender": "L",
+    "motherName": "Siti Aminah",
+    "fatherName": "Budi Santoso",
+    "address": "Jl. Merdeka No. 123",
+    "phone": "081234567890",
+    "weight": 3.2,
+    "height": 50,
+    "headCircumference": 35,
+    "notes": "Bayi sehat",
+    "createdAt": "2025-10-04T04:01:33.347Z",
+    "updatedAt": "2025-10-04T04:01:33.347Z"
+  },
+  {
+    "id": 1759550493348.6016,
+    "name": "Diven",
+    "birthDate": "2024-02-20",
+    "gender": "P",
+    "motherName": "Dewi Sartika",
+    "fatherName": "Ahmad Yani",
+    "address": "Jl. Pahlawan No. 456",
+    "phone": "081234567891",
+    "weight": 3,
+    "height": 48,
+    "headCircumference": 34,
+    "notes": "Bayi prematur",
+    "createdAt": "2025-10-04T04:01:33.348Z",
+    "updatedAt": "2025-10-04T04:01:33.348Z"
   }
 ]
