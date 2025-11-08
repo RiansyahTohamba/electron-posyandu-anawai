@@ -1,0 +1,103 @@
+@startuml
+' ==========================
+' CLASS DIAGRAM SISTEM PENCATATAN DATA BAYI
+' ==========================
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam backgroundColor #FFFFFF
+skinparam class {
+    BackgroundColor<<entity>> #F4F9FF
+    BackgroundColor<<control>> #E9F7EF
+    BackgroundColor<<boundary>> #FFF9E6
+}
+
+' --- ENTITAS INTI ---
+class Bayi <<entity>> {
+    - id_bayi : int
+    - nama : string
+    - tanggal_lahir : date
+    - jenis_kelamin : string
+    - nama_ibu : string
+    - alamat : string
+}
+
+class Pengukuran <<entity>> {
+    - id_pengukuran : int
+    - tanggal_pengukuran : date
+    - berat_badan : float
+    - tinggi_badan : float
+    - lingkar_kepala : float
+}
+
+class Imunisasi <<entity>> {
+    - id_imunisasi : int
+    - tanggal_imunisasi : date
+    - jenis_imunisasi : string
+    - keterangan : string
+}
+
+class Petugas <<entity>> {
+    - id_petugas : int
+    - nama_petugas : string
+    - username : string
+    - password : string
+}
+
+' --- HUBUNGAN ANTAR ENTITAS ---
+Bayi "1" -- "0..*" Pengukuran : melakukan >
+Bayi "1" -- "0..*" Imunisasi : menerima >
+Petugas "1" -- "0..*" Pengukuran : mencatat >
+Petugas "1" -- "0..*" Imunisasi : mencatat >
+Petugas "1" -- "0..*" Bayi : mendaftarkan >
+
+' --- CONTROL / SERVICE LAYER ---
+class BayiController <<control>> {
+    + tambahDataBayi()
+    + editDataBayi()
+    + hapusDataBayi()
+    + lihatDataBayi()
+}
+
+class PengukuranController <<control>> {
+    + tambahPengukuran()
+    + editPengukuran()
+    + lihatRiwayatPengukuran()
+}
+
+class ImunisasiController <<control>> {
+    + tambahImunisasi()
+    + editImunisasi()
+    + lihatRiwayatImunisasi()
+}
+
+' --- BOUNDARY / UI ---
+class FormPencatatan <<boundary>> {
+    + inputDataBayi()
+    + tampilkanNotifikasi()
+}
+
+class FormPengukuran <<boundary>> {
+    + inputDataPengukuran()
+    + tampilkanRiwayat()
+}
+
+class FormImunisasi <<boundary>> {
+    + inputDataImunisasi()
+    + tampilkanStatus()
+}
+
+' --- RELASI MVC ---
+FormPencatatan --> BayiController
+FormPengukuran --> PengukuranController
+FormImunisasi --> ImunisasiController
+
+BayiController --> Bayi
+PengukuranController --> Pengukuran
+ImunisasiController --> Imunisasi
+
+Petugas --> BayiController
+Petugas --> PengukuranController
+Petugas --> ImunisasiController
+
+@enduml
