@@ -14,7 +14,7 @@ else (Tidak)
     :Sistem menampilkan pesan "Data tidak valid";
 endif
 stop
-@enduml
+
 
 
 newpage
@@ -33,7 +33,7 @@ else (Tidak)
     :Sistem menampilkan peringatan;
 endif
 stop
-@enduml
+
 
 
 newpage
