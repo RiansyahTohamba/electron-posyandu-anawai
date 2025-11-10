@@ -17,7 +17,7 @@ stop
 @enduml
 
 
-@startuml
+newpage
 title Activity Diagram - Pengukuran Data Bayi
 
 start
@@ -36,7 +36,7 @@ stop
 @enduml
 
 
-@startuml
+newpage
 title Activity Diagram - Pencatatan Imunisasi
 
 start
