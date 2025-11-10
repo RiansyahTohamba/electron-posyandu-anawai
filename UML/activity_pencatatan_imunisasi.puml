@@ -1,0 +1,17 @@
+@startuml
+title Activity Diagram - Pencatatan Imunisasi
+
+start
+:Petugas login ke sistem;
+:Memilih menu "Imunisasi";
+:Memilih nama bayi;
+:Memasukkan jenis imunisasi dan tanggal pemberian;
+:Menekan tombol "Simpan";
+if (Data lengkap?) then (Ya)
+    :Data disimpan ke database;
+    :Sistem menampilkan pesan "Berhasil disimpan";
+else (Tidak)
+    :Sistem menampilkan peringatan;
+endif
+stop
+@enduml

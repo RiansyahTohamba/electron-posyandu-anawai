@@ -1,0 +1,17 @@
+@startuml
+title Activity Diagram - Pengukuran Data Bayi
+
+start
+:Petugas login ke sistem;
+:Memilih menu "Pengukuran";
+:Menentukan bayi yang akan diukur;
+:Memasukkan data (berat, tinggi, lingkar kepala);
+:Menekan tombol "Simpan";
+if (Data lengkap?) then (Ya)
+    :Data disimpan ke database;
+    :Riwayat pengukuran diperbarui;
+else (Tidak)
+    :Sistem menampilkan peringatan;
+endif
+stop
+@enduml

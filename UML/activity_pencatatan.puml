@@ -1,0 +1,19 @@
+@startuml
+title Activity Diagram - Pencatatan Data Bayi
+
+start
+:Petugas login ke sistem;
+:Memilih menu "Data Bayi";
+:Menekan tombol "Tambah Data";
+:Memasukkan data bayi (nama, tanggal lahir, jenis kelamin, alamat, nama ibu);
+:Menekan tombol "Simpan";
+if (Data valid?) then (Ya)
+    :Data disimpan ke database;
+    :Sistem menampilkan pesan "Berhasil disimpan";
+else (Tidak)
+    :Sistem menampilkan pesan "Data tidak valid";
+endif
+stop
+@enduml
+
+
