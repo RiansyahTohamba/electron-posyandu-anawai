@@ -1,0 +1,17 @@
+@startuml
+title Sequence Diagram - Proses Pencatatan Data Bayi
+
+actor Petugas
+boundary "Form Data Bayi" as Form
+control "BayiController" as Controller
+entity "Database" as DB
+
+Petugas -> Form: Buka halaman Data Bayi
+Form -> Petugas: Tampilkan form input
+Petugas -> Form: Isi data bayi dan klik Simpan
+Form -> Controller: Kirim data bayi
+Controller -> DB: Simpan data ke tabel bayi
+DB --> Controller: Konfirmasi penyimpanan
+Controller --> Form: Kirim status berhasil
+Form --> Petugas: Tampilkan notifikasi sukses
+@enduml
