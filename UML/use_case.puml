@@ -1,15 +1,17 @@
 @startuml
 title Use Case Diagram - Aplikasi Posyandu SIPANDU
 
+left to right direction
+
 actor "Petugas Kesehatan" as Petugas
 
 rectangle "Sistem Posyandu SIPANDU" {
+    top to bottom direction
     usecase "Login Sistem" as UC1
     usecase "Mencatat Data Bayi" as UC2
     usecase "Melakukan Pengukuran Bayi" as UC3
     usecase "Mencatat Data Imunisasi" as UC4
     usecase "Upload Data Bayi" as UC6
-    usecase "Melihat Laporan Statistik" as UC8
 }
 
 Petugas --> UC1
