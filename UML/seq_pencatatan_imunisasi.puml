@@ -1,17 +1,18 @@
 @startuml
-title Activity Diagram - Pencatatan Imunisasi
+title Sequence Diagram - Proses Pencatatan Imunisasi
 
-start
-:Petugas login ke sistem;
-:Memilih menu "Imunisasi";
-:Memilih nama bayi;
-:Memasukkan jenis imunisasi dan tanggal pemberian;
-:Menekan tombol "Simpan";
-if (Data lengkap?) then (Ya)
-    :Data disimpan ke database;
-    :Sistem menampilkan pesan "Berhasil disimpan";
-else (Tidak)
-    :Sistem menampilkan peringatan;
-endif
-stop
+actor Petugas
+boundary "Form Imunisasi" as Form
+control "ImunisasiController" as Controller
+entity "Database" as DB
+
+Petugas -> Form: Buka menu Imunisasi
+Form -> Petugas: Tampilkan daftar bayi
+Petugas -> Form: Pilih bayi dan isi data imunisasi
+Form -> Controller: Kirim data imunisasi
+Controller -> DB: Simpan ke tabel imunisasi
+DB --> Controller: Konfirmasi sukses
+Controller --> Form: Kirim pesan berhasil
+Form --> Petugas: Tampilkan notifikasi berhasil
 @enduml
+ 
