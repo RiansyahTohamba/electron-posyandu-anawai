@@ -1,0 +1,33 @@
+@startuml
+title Use Case Diagram - Aplikasi Posyandu SIPANDU
+
+actor "Petugas Kesehatan" as Petugas
+actor "Admin Puskesmas" as Admin
+actor "Kepala Puskesmas" as Kepala
+
+rectangle "Sistem Posyandu SIPANDU" {
+    usecase "Login Sistem" as UC1
+    usecase "Mencatat Data Bayi" as UC2
+    usecase "Melakukan Pengukuran Bayi" as UC3
+    usecase "Mencatat Data Imunisasi" as UC4
+    usecase "Melihat Dashboard" as UC5
+    usecase "Upload Data Bayi" as UC6
+    usecase "Kelola Akun Petugas" as UC7
+    usecase "Melihat Laporan Statistik" as UC8
+}
+
+Petugas --> UC1
+Petugas --> UC2
+Petugas --> UC3
+Petugas --> UC4
+Petugas --> UC5
+Petugas --> UC6
+
+Admin --> UC1
+Admin --> UC7
+
+Kepala --> UC1
+Kepala --> UC5
+Kepala --> UC8
+
+@enduml
